@@ -40,21 +40,21 @@ func FileExists(path string) bool {
 // size as the original file
 func RandomizeFileContents(path string, chunkSize int) {
 	// open fd for read/write
-	fileToShred, err := os.OpenFile(path, os.O_RDWR, 0)
+	fileToRandomize, err := os.OpenFile(path, os.O_RDWR, 0)
 	check(err)
-	defer fileToShred.Close()
+	defer fileToRandomize.Close()
 
 	// get current fd information
-	fileInfo, err := fileToShred.Stat()
+	fileInfo, err := fileToRandomize.Stat()
 	check(err)
 
 	// store current fd size
-	shredFileSize := fileInfo.Size()
+	fileSize := fileInfo.Size()
 
 	// write file in chunks to avoid bringing entire
 	// contents into memory
-	chunks := shredFileSize / int64(chunkSize)
-	remainder := int(shredFileSize % int64(chunkSize))
+	chunks := fileSize / int64(chunkSize)
+	remainder := int(fileSize % int64(chunkSize))
 
 	// open /dev/random to sample random data
 	randomFile, err := os.Open("/dev/urandom")
@@ -68,7 +68,7 @@ func RandomizeFileContents(path string, chunkSize int) {
 		check(err)
 
 		// write to file
-		fileToShred.Write(randomBytes)
+		fileToRandomize.Write(randomBytes)
 	}
 
 	// write remainder of bytes required from /dev/random
@@ -77,7 +77,7 @@ func RandomizeFileContents(path string, chunkSize int) {
 	check(err)
 
 	// write to file
-	fileToShred.Write(randomBytes)
+	fileToRandomize.Write(randomBytes)
 }
 
 // ShredFile
