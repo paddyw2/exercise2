@@ -28,3 +28,5 @@ Test cases not handled:
  - behaviour with "non-standard" files, such as virtual filesystems, network drives, devices, etc.
  - low memory devices (although basic memory usage tracked)
  - simulating devices low on storage and handling "No space left on device" errors
+ - checking file size is same before deleting
+ - checking no subcontents of original file are found in contents before deleting
